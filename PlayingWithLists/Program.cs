@@ -14,7 +14,7 @@ namespace PlayingWithLists
         {
             Stash = new List<Box>(); //Make a list. Lists are good places to stash boxes. I swear.
             Container = new Container(); //Make a container, you know,for containing.
-            //Tutorial(Container);
+            Tutorial(Container);
 
             //Menu loop
             while (true)
