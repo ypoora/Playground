@@ -22,11 +22,13 @@ namespace PlayingWithLists
             ToRemoveFromStash.Add(box);
         }
 
-        public void Unload(string BoxColour)
+        public void Unload()
         {
+            var BoxColour = Console.ReadLine();
             List<Box> BoxesToUnload = Contents.FindAll(x => x.Colour == BoxColour);
             foreach (var box in BoxesToUnload)
             {
+                Console.WriteLine("What box colour would you like to go through?");
                 Console.WriteLine($"There's a {box.Colour} box here that contains {box.Item}. Do you want to unload this? Y/N");
                 var key = Console.ReadKey();
                 if (key.KeyChar.ToString().ToLower() == "y")

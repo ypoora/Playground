@@ -1,59 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Dynamic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace PlayingWithLists
 {
     class Program
     {
         public static List<Box> Stash { get; set; }
+        public static Container Container { get; set; }
 
         static void Main(string[] args)
         {
             Stash = new List<Box>(); //Make a list. Lists are good places to stash boxes. I swear.
-            var container = new Container(); //Make a container, you know,for containing.
-            Tutorial(container);
+            Container = new Container(); //Make a container, you know,for containing.
+            //Tutorial(Container);
 
-            while (true) //Main menu loop.
+            //Menu loop
+            while (true)
             {
-                Console.WriteLine("\n1.Fill some new boxes.\n2.View your stash.\n3.Empty your boxes.\n4.Fill all your boxes with one thing.\n5.Put your boxes into your container.\n6.Take some boxes out of the container.\n7. Show what's in the container.\n");
-                var key = Console.ReadKey(true);
-                Console.Clear();
-                switch (key.KeyChar.ToString().ToLower())
-                {
-                    case "1":
-                        FillBox();
-                        break;
-                    case "2":
-                        ShowStash();
-                        break;
-                    case "3":
-                        EmptyBoxes();
-                        Console.WriteLine("Took everything out. Threw it overboard. These items will never be seen again!");
-                        ShowStash();
-                        break;
-                    case "4":
-                        Console.WriteLine("What to fill 'em with?\n");
-                        var NewThing = Console.ReadLine();
-                        FillAllBoxes(NewThing);
-                        Console.WriteLine("it is done. Check your stash out!\n");
-                        break;
-                    case "5":
-                        LoadBoxes(container);
-                        break;
-                    case "6":
-                        Console.WriteLine("What box colour would you like to go through?");
-                        var BoxColour = Console.ReadLine();
-                        container.Unload(BoxColour);
-                        break;
-                    case "7":
-                        container.ListContents();
-                        break;
-                    default:
-                        break;
-                }
+                Menu();
             }
+        }
+
+        private static void Menu()
+        {
+            var options = new List<(string, Action)>
+            {
+                ("Look at your stash", () => ShowStash()),
+                ("Add a new box", () => FillBox()),
+                ("Empty your boxes", () => EmptyBoxes()),
+                ("Load your container", () => LoadBoxes(Container)),
+                ("Unload boxes from your container", () => Container.Unload()),
+                ("Show your container contents", () => Container.ListContents())
+            };
+            int optNo = 0;
+            foreach (var option in options)
+            {
+                Console.WriteLine($"{++optNo}. {option.Item1}");
+            }
+            Console.WriteLine($"\nPlease select an option [ 1 - {options.Count} ]\n");
+            var choice = 0;
+            while (true) 
+            {
+                var input = Console.ReadLine();
+                if (input.ToCharArray().All(x => char.IsNumber(x)))
+                {
+                    choice = int.Parse(input);
+                    if (choice > 0 && choice <= options.Count) {
+                        break;
+                    }
+                }
+                Console.WriteLine($"That didn't work. Please input a number from 1 to {options.Count}.");
+            }
+            options[choice - 1].Item2.Invoke();
         }
 
         private static void Tutorial(Container container)
