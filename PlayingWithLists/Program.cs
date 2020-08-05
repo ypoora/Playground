@@ -7,10 +7,13 @@ namespace PlayingWithLists
     internal static class Program
     {
         public static List<Box> Stash { get; private set; }
-        private static Container Container { get; set; }
+        public static Container Container { get; set; }
+        
+        
 
         private static void Main(string[] args)
         {
+            var menuOptions = new List<(string, Action)> {("Look at your stash", Program.ShowStash), ("Add a new box", Program.FillBox), ("Empty your boxes", Program.EmptyBoxes), ("Load your container", () => Program.LoadBoxes(Program.Container)), ("Unload boxes from your container", Container.Unload), ("Show your container contents", Container.ListContents), ("Do the tutorial again", () => Program.Tutorial(Program.Container)), ("Quit", () => Environment.Exit(0)) };
             Stash = new List<Box>(); //Make a list. Lists are good places to stash boxes. I swear.
             Container = new Container(); //Make a container, you know,for containing.
             Tutorial(Container);
@@ -18,46 +21,12 @@ namespace PlayingWithLists
             //Menu loop
             while (true)
             {
-                Menu();
+                Menu.ShowMenu(menuOptions);
             }
         }
 
-        private static void Menu()
-        {
-            var options = new List<(string, Action)>
-            {
-                ("Look at your stash", ShowStash),
-                ("Add a new box", FillBox),
-                ("Empty your boxes", EmptyBoxes),
-                ("Load your container", () => LoadBoxes(Container)),
-                ("Unload boxes from your container", () => Container.Unload()),
-                ("Show your container contents", () => Container.ListContents()),
-                ("Do the tutorial again", () => Tutorial(Container)),
-                ("Quit", () => Environment.Exit(0))
-            };
-            var optNo = 0;
-            foreach (var option in options)
-            {
-                Console.WriteLine($"{++optNo}. {option.Item1}");
-            }
-            Console.WriteLine($"\nPlease select an option [ 1 - {options.Count} ]\n");
-            var choice = 0;
-            while (true) 
-            {
-                var input = Console.ReadLine() ?? "0";
-                if (input.ToCharArray().All(char.IsNumber))
-                {
-                    choice = int.Parse(input);
-                    if (choice > 0 && choice <= options.Count) {
-                        break;
-                    }
-                }
-                Console.WriteLine($"That didn't work. Please input a number from 1 to {options.Count}.");
-            }
-            options[choice - 1].Item2.Invoke();
-        }
 
-        private static void Tutorial(Container container)
+        public static void Tutorial(Container container)
         {
             Console.WriteLine("Imagine this. You have boxes available in any colour you like.");
             Console.WriteLine("You have a bunch of items you could stash in there!");
@@ -88,7 +57,7 @@ namespace PlayingWithLists
             {
                 LoadBoxes(container);
                 Console.WriteLine("\nContainer's loaded! Here's what's inside:\n");
-                foreach (var box in container.Contents)
+                foreach (var box in Container.Contents)
                 {
                     Console.WriteLine($"{box.Colour} box with {box.Item}.");
                 }
@@ -97,7 +66,7 @@ namespace PlayingWithLists
             Console.WriteLine("\nNow what? World's your oyster!\n");
         }
 
-        private static void LoadBoxes(Container container)
+        public static void LoadBoxes(Container container)
         {
             foreach (var box in Stash)
             {
@@ -111,7 +80,7 @@ namespace PlayingWithLists
 
         }
 
-        private static void FillAllBoxes(string NewThing)
+        public static void FillAllBoxes(string NewThing)
         {
             foreach (var box in Stash)
             {
@@ -119,7 +88,7 @@ namespace PlayingWithLists
             }
         }
 
-        private static void EmptyBoxes()
+        public static void EmptyBoxes()
         {
             foreach (var box in Stash)
             {
@@ -127,7 +96,7 @@ namespace PlayingWithLists
             }
         }
 
-        private static void ShowStash()
+        public static void ShowStash()
         {
             Console.WriteLine("\nYour stash contains the following:\n"); //Show off your stash of boxes and their contents. You're so organized.
             foreach (var box in Stash)
@@ -137,7 +106,7 @@ namespace PlayingWithLists
             Console.WriteLine();
         }
 
-        private static void FillBox()
+        public static void FillBox()
         {
                 Console.WriteLine("\nWhat's the colour of your box?");
                 var colour = Console.ReadLine();
@@ -151,4 +120,5 @@ namespace PlayingWithLists
                 Console.WriteLine($"\nCool, now you have a {box.Colour} box containing {box.Item}.\n");
         }
     }
+
 }

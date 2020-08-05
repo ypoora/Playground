@@ -5,7 +5,7 @@ namespace PlayingWithLists
 {
     class Container
     {
-        public List<Box> Contents { get; set; }
+        public static List<Box> Contents { get; set; }
         public List<Box> ToRemoveFromStash { get; set; }
         //public string ContainerNumber { get; set; } unneeded for now
 
@@ -16,13 +16,13 @@ namespace PlayingWithLists
             // int ContainerNumber = CNumber;
         }
 
-        public void Load(Box box) //todo add intermediary list so this does not throw an exception.
+        public void Load(Box box)
         {
             Contents.Add(box);
             ToRemoveFromStash.Add(box);
         }
 
-        public void Unload()
+        public static void Unload()
         {
             var BoxColour = Console.ReadLine();
             List<Box> BoxesToUnload = Contents.FindAll(x => x.Colour == BoxColour);
@@ -40,7 +40,7 @@ namespace PlayingWithLists
 
             }
         }
-        public void ListContents()
+        public static void ListContents()
         {
             Console.WriteLine("\nThe container contains:\n");
             foreach (var box in Contents)
