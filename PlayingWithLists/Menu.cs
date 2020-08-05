@@ -20,7 +20,7 @@ namespace PlayingWithLists
             while (true)
             {
                 var input = Console.ReadLine() ?? "0";
-                if (input.ToCharArray().All(char.IsNumber))
+                if (input != "" && input.ToCharArray().All(char.IsNumber))
                 {
                     choice = int.Parse(input);
                     if (choice > 0 && choice <= options.Count)
