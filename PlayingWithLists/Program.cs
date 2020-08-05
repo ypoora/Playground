@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace PlayingWithLists
 {
-    class Program
+    internal static class Program
     {
-        public static List<Box> Stash { get; set; }
-        public static Container Container { get; set; }
+        public static List<Box> Stash { get; private set; }
+        private static Container Container { get; set; }
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Stash = new List<Box>(); //Make a list. Lists are good places to stash boxes. I swear.
             Container = new Container(); //Make a container, you know,for containing.
@@ -27,14 +26,16 @@ namespace PlayingWithLists
         {
             var options = new List<(string, Action)>
             {
-                ("Look at your stash", () => ShowStash()),
-                ("Add a new box", () => FillBox()),
-                ("Empty your boxes", () => EmptyBoxes()),
+                ("Look at your stash", ShowStash),
+                ("Add a new box", FillBox),
+                ("Empty your boxes", EmptyBoxes),
                 ("Load your container", () => LoadBoxes(Container)),
                 ("Unload boxes from your container", () => Container.Unload()),
-                ("Show your container contents", () => Container.ListContents())
+                ("Show your container contents", () => Container.ListContents()),
+                ("Do the tutorial again", () => Tutorial(Container)),
+                ("Quit", () => Environment.Exit(0))
             };
-            int optNo = 0;
+            var optNo = 0;
             foreach (var option in options)
             {
                 Console.WriteLine($"{++optNo}. {option.Item1}");
@@ -43,8 +44,8 @@ namespace PlayingWithLists
             var choice = 0;
             while (true) 
             {
-                var input = Console.ReadLine();
-                if (input.ToCharArray().All(x => char.IsNumber(x)))
+                var input = Console.ReadLine() ?? "0";
+                if (input.ToCharArray().All(char.IsNumber))
                 {
                     choice = int.Parse(input);
                     if (choice > 0 && choice <= options.Count) {
@@ -61,7 +62,7 @@ namespace PlayingWithLists
             Console.WriteLine("Imagine this. You have boxes available in any colour you like.");
             Console.WriteLine("You have a bunch of items you could stash in there!");
             Console.WriteLine("Let's put ten items into ten coloured boxes. Go!");
-            int i = 0;
+            var i = 0;
             while (i < 10)
             {
                 FillBox();
