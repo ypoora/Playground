@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PlayingWithLists
+namespace ConTools
 {
     public class Menu
     {

@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizApp", "QuizApp\QuizApp.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingActions", "TestingActions\TestingActions.csproj", "{1BCF4CA4-18D1-4850-B75F-24247AE45A25}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConTools", "ConTools\ConTools.csproj", "{7A1774B6-DC7A-4FED-8421-9773A23B1DA8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{1BCF4CA4-18D1-4850-B75F-24247AE45A25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BCF4CA4-18D1-4850-B75F-24247AE45A25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BCF4CA4-18D1-4850-B75F-24247AE45A25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A1774B6-DC7A-4FED-8421-9773A23B1DA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A1774B6-DC7A-4FED-8421-9773A23B1DA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A1774B6-DC7A-4FED-8421-9773A23B1DA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A1774B6-DC7A-4FED-8421-9773A23B1DA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
