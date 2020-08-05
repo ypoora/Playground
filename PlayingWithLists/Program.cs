@@ -57,10 +57,10 @@ namespace PlayingWithLists
                 EmptyBoxes();
                 ShowStash();
                 Console.WriteLine("Now tell me something you really really like a lot.");
-                var NewThing = Console.ReadLine();
+                var newThing = Console.ReadLine();
                 Console.WriteLine(
                     "\nCool. Did ya a favour; here's your new stash!\n"); //I'm going to put your favourite thing into all of your boxes. Aren't i nice?
-                FillAllBoxes(NewThing);
+                FillAllBoxes(newThing);
                 ShowStash();
             }
 
@@ -95,11 +95,11 @@ namespace PlayingWithLists
             }
         }
 
-        private static void FillAllBoxes(string NewThing)
+        private static void FillAllBoxes(string newThing)
         {
             foreach (var box in Stash)
             {
-                box.Fill(NewThing);
+                box.Fill(newThing);
             }
         }
 
