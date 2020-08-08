@@ -93,7 +93,7 @@ namespace CrossingTheStreams
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine("File sent OK!\n");
-                            Console.ForegroundColor = ConsoleColor.Gray
+                            Console.ForegroundColor = ConsoleColor.Gray;
                             break;
                         }
                         else
@@ -140,9 +140,9 @@ namespace CrossingTheStreams
                     {
                         var client = listener.AcceptTcpClient();
                         Console.SetCursorPosition(2,Console.WindowHeight - 2);
-                        Console.ForegroundColor = ConsoleColor.Yellow
+                        Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.Write("Client connecting... Enter path to save file: ");
-                        Console.ForegroundColor = ConsoleColor.Gray
+                        Console.ForegroundColor = ConsoleColor.Gray;
                         while (true)
                         {
                             path = Console.ReadLine();
