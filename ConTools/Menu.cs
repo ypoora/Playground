@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ConTools
 {
-    public class Menu
+    public static class Menu
     {
         public static void ShowMenu(List<(string,Action)> options)
         {
