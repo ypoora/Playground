@@ -2,7 +2,9 @@
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
+using ConTools;
 
 namespace CrossingTheStreams
 {
@@ -29,25 +31,72 @@ namespace CrossingTheStreams
                     try
                     {
                         var client = listener.AcceptTcpClient();
-                        Console.SetCursorPosition(2,1);
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write("Client connecting... Enter path to save file: ");
-                        Console.CursorVisible = true;
-                        Console.ForegroundColor = ConsoleColor.Gray;
+                        //Console.SetCursorPosition(2,1);
+                        //Console.ForegroundColor = ConsoleColor.Yellow;
+                        //Console.Write("Client connecting... Enter path to save file: ");
+                        //Console.CursorVisible = true;
+                        //Console.ForegroundColor = ConsoleColor.Gray;
                         while (true)
                         {
-                            path = Console.ReadLine();
+                            //TODO: turn these into extension methods for code cleanness
+                            //Read in the 
+                            var netstream = client.GetStream();
+                            var nameLenBuf = new byte[4];
+                            netstream.Read(nameLenBuf, 0, 4);
+                            var nameLen = BitConverter.ToInt32(nameLenBuf);
+                            var nameBuf = new byte[nameLen];
+                            netstream.Read(nameBuf, 0, nameLen);
+                            var name = Encoding.UTF8.GetString(nameBuf);
+                            var lenBuf = new byte[8];
+                            netstream.Read(lenBuf, 0, 8);
+                            var len = BitConverter.ToInt64(lenBuf);
+
+
+                            path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), name);
+                            //path = Console.ReadLine();
                             if (!string.IsNullOrEmpty(path))
                             {
-                                Console.CursorVisible = false;
+                                //Console.CursorVisible = false;
                                 Console.SetCursorPosition(2,2);
                                 Console.WriteLine("Receiving file...");
-                                file = File.OpenWrite(path);
-                                var netstream = client.GetStream();
-                                netstream.CopyTo(file);
-                                file.Dispose();
-                                Console.SetCursorPosition(2,2);
-                                Console.WriteLine($"File {path} was stored.");
+                                file = File.OpenWrite(path + name);
+                                var task = netstream.CopyToAsync(file);
+                                Console.Clear();
+                                //Console.CursorVisible = false;
+                                do
+                                {
+                                    ProgressBar.ShowProgress(Math.Ceiling((double) file.Position / len * 100), $"Receiving {name}...", true);
+                                    Thread.Sleep(500);
+                                } while (!task.IsCompleted);
+
+                                if (task.IsCompletedSuccessfully)
+                                {
+                                    Console.Clear();
+                                    file.Dispose();
+                                    Console.SetCursorPosition(2, 2);
+                                    Console.WriteLine($"File {name} was stored.");
+                                }
+                                else
+                                {
+                                    file.Dispose();
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("Something went wrong. Check the network and sender, then try again.\n");
+                                    Console.ForegroundColor = ConsoleColor.Gray;
+                                    Console.WriteLine("Deleting the failed partial file... ");
+                                    try
+                                    {
+                                        File.Delete(path);
+                                        Console.WriteLine("File deleted.");
+                                    }
+                                    catch
+                                    {
+                                        Console.WriteLine("Deletion failed. File may not have been created yet.");
+                                    }
+
+                                    Thread.Sleep(1000);
+                                    Console.Clear();
+                                }
+
                                 Console.SetCursorPosition(2,1);
                                 while (Console.CursorLeft <= Console.WindowWidth - 2)
                                 {
