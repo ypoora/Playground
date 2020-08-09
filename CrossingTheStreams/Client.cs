@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using ConTools;
 
 namespace CrossingTheStreams
 {
@@ -47,32 +48,10 @@ namespace CrossingTheStreams
                         Task task = file.CopyToAsync(netstream);
                         Console.Clear();
                         Console.CursorVisible = false;
-                        Console.WriteLine("Transferring... ");
-                        var origwidth = Console.WindowWidth;
                         do
                         {
+                            ProgressBar.ShowProgress(Math.Ceiling((double)file.Position / filesize * 100), "Transferring...");
                             Thread.Sleep(500);
-                            if (Console.WindowWidth < origwidth)
-                            {
-                                Console.SetWindowSize(origwidth, Console.WindowHeight);
-                            }
-
-                            var percent = Math.Round(file.Position / (double) filesize * 100);
-                            Console.SetCursorPosition(16, 0);
-                            Console.Write((percent + "%").PadLeft(4));
-                            Console.SetCursorPosition(0, Console.WindowHeight - 1);
-                            while (Console.CursorLeft <= Console.WindowWidth - 2)
-                            {
-                                double barposition = Console.WindowWidth * percent / 100;
-                                if (Console.CursorLeft <= barposition)
-                                {
-                                    Console.Write("=");
-                                }
-                                else
-                                {
-                                    Console.Write(" ");
-                                }
-                            }
                         } while (!task.IsCompleted);
                         Console.CursorVisible = true;
                         client.Close();
@@ -84,14 +63,12 @@ namespace CrossingTheStreams
                             Console.ForegroundColor = ConsoleColor.Gray;
                             break;
                         }
-                        else
-                        {
-                            client.Dispose();
+                        client.Dispose();
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine(
                                 "Something went wrong. Check the network and receiver, then try again.\n");
                             Console.ForegroundColor = ConsoleColor.Gray;
-                        }
+                            break;
                     }
                     catch (IOException)
                     {
