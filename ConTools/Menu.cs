@@ -6,6 +6,10 @@ namespace ConTools
 {
     public static class Menu
     {
+        /// <summary>
+        /// Shows a menu with options for numeric entry.
+        /// </summary>
+        /// <param name="options">List of options to present (name of option, corresponding action)</param>
         public static void ShowMenu(List<(string,Action)> options)
         {
 

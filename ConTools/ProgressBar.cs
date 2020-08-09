@@ -6,9 +6,15 @@ namespace ConTools
     public static class ProgressBar
     {
         private static (int, int) _windowSize = (0, 0);
-
-        public static void ShowProgress(double percent, string message)
+        /// <summary>
+        /// Shows a full-screen progress bar to the user with a percentage display and a customizable message.
+        /// </summary>
+        /// <param name="percent">Percentage to draw (0-100, accepts doubles)</param>
+        /// <param name="message">Message to show to user whilst your process runs</param>
+        /// <param name="showPercent">Display percentage true/false</param>
+        public static void ShowProgress(double percent, string message, bool showPercent)
         {
+            
             if (Console.WindowWidth < 22 && Console.WindowHeight < 5) return;
             if (_windowSize != (Console.WindowWidth, Console.WindowHeight))
             {
@@ -20,8 +26,8 @@ namespace ConTools
 
             try
             {
-                Console.SetCursorPosition(Console.WindowWidth / 2 - 2, Console.WindowHeight - 1);
-                Console.Write($"{percent}%");
+                if(showPercent) Console.SetCursorPosition(Console.WindowWidth / 2 - 2, Console.WindowHeight - 1);
+                if(showPercent) Console.Write($"{percent}%");
                 Console.SetCursorPosition(0, Console.WindowHeight - 2);
                 var barLength = Math.Floor(Console.WindowWidth * (percent / 100));
                 var builder = new StringBuilder();
