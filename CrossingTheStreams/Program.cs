@@ -32,7 +32,7 @@ namespace CrossingTheStreams
             {
                 var path = Console.ReadLine();
 
-                if (File.Exists(path))
+                if (!string.IsNullOrEmpty(path) && File.Exists(path))
                 {
                     file = File.OpenRead(path);
                     filesize = new FileInfo(path).Length;
@@ -49,7 +49,7 @@ namespace CrossingTheStreams
             {
                 var address = Console.ReadLine();
                 IPAddress ipaddress;
-                if (IPAddress.TryParse(address, out ipaddress))
+                if (!string.IsNullOrEmpty(address) && IPAddress.TryParse(address, out ipaddress))
                 {
 
                     try
@@ -124,7 +124,7 @@ namespace CrossingTheStreams
         private static void NesdServer()
         {
             FileStream file;
-            var listener = new TcpListener(8000);
+            var listener = new TcpListener(IPAddress.Any,8000);
             listener.Start();
             Console.WriteLine("Server started.");
             while (true)
@@ -175,6 +175,7 @@ namespace CrossingTheStreams
                         }
                         catch
                         {
+                            Console.WriteLine("Deletion failed. File may not have been created yet.");
                         }
 
                         Thread.Sleep(1000);
